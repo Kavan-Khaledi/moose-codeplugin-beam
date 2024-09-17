@@ -1,0 +1,15 @@
+[Tests]
+  issues = '#1'
+  [euler_pipe_bend]
+    type = 'Exodiff'
+    input = 'euler_pipe_bend.i'
+    exodiff = 'euler_pipe_bend_out.e'
+    requirement = 'Test for small strain Euler beam bending in y direction'
+  []
+  [timoshenko_small_strain_y]
+    type = 'Exodiff'
+    input = 'timoshenko_small_strain_y.i'
+    exodiff = 'timoshenko_small_strain_y_out.e'
+    requirement = 'Test for small strain Timoshenko beam bending in y direction'
+  []
+[]
