@@ -168,7 +168,7 @@ ComputeIncrementalCurvedBeamStrain::initQpStatefulProperties()
                  Utility::string_to_enum<FEFamily>("LAGRANGE"));
  const std::vector<RealGradient> * orientation =&_subproblem.assembly(_tid, _nonlinear_sys.number()).getFE(fe_type, 1)->get_dxyzdxi();
   RealGradient x_orientation=(*orientation)[0];
- 
+
   x_orientation /= x_orientation.norm();
   RealGradient y_orientation={0,1,0};
   RealGradient z_orientation={0,0,1};
@@ -183,7 +183,7 @@ ComputeIncrementalCurvedBeamStrain::initQpStatefulProperties()
              x_orientation(2) * y_orientation(2);
     if (std::abs(sum) > 1e-4)
     {
-     y_orientation={0,1,0}; 
+     y_orientation={0,1,0};
     }
   }
 
@@ -223,7 +223,7 @@ ComputeIncrementalCurvedBeamStrain::computeProperties()
   std::vector<const Node *> node;
   for (unsigned int i = 0; i < 3; ++i)
     node.push_back(_current_elem->node_ptr(i));
-   
+
   // calculate original length of a beam element
   // Nodal positions do not change with time as undisplaced mesh is used by material classes by
   // default
@@ -252,7 +252,7 @@ ComputeIncrementalCurvedBeamStrain::computeProperties()
     _rot0(i) = sol(_soln_rot_index_0[i]) - sol_old(_soln_rot_index_0[i]);
     _rot1(i) = sol(_soln_rot_index_1[i]) - sol_old(_soln_rot_index_1[i]);
     _rot2(i) = sol(_soln_rot_index_2[i]) - sol_old(_soln_rot_index_2[i]);
-   
+
   }
 
   // For small rotation problems,cd the rotation matrix is essentially the transformation from the
@@ -260,7 +260,7 @@ ComputeIncrementalCurvedBeamStrain::computeProperties()
   // overriden for scenarios with finite rotations
   //computeRotation();
   _initial_rotation[0] = _original_local_config;
- 
+
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
     computeQpStrain();
 
@@ -271,9 +271,9 @@ ComputeIncrementalCurvedBeamStrain::computeProperties()
 void
 ComputeIncrementalCurvedBeamStrain::computeQpStrain()
 {
-  
+
   Real xi=_qrule->get_points()[_qp](0);
- 
+
   Real h0=0.5*(xi-1.0)*xi;
   Real h1=0.5*(xi+1.0)*xi;
   Real h2=(1.0-xi*xi);
@@ -343,7 +343,7 @@ ComputeIncrementalCurvedBeamStrain::computeQpStrain()
                                        _grad_rot_0_local_t(2) * _Iy[_qp] -
                                        _grad_rot_0_local_t(1) * Iyz;
 
- 
+
 
   _total_disp_strain[_qp] = _total_rotation[0].transpose() * _mech_disp_strain_increment[_qp] +
                             _total_disp_strain_old[_qp];

@@ -18,7 +18,6 @@
 #include "RankTwoTensor.h"
 #include "MooseMesh.h"
 
-
 #include "libmesh/quadrature.h"
 #include "libmesh/utility.h"
 #include "libmesh/enum_quadrature_type.h"
@@ -110,8 +109,8 @@ StressDivergenceCurvedBeam::StressDivergenceCurvedBeam(const InputParameters & p
     _nonlinear_sys(_fe_problem.getNonlinearSystemBase(/*nl_sys_num=*/0))
 {
   if (_ndisp != _nrot)
-    mooseError(
-        "StressDivergenceCurvedBeam: The number of displacement and rotation variables should be same.");
+    mooseError("StressDivergenceCurvedBeam: The number of displacement and rotation variables "
+               "should be same.");
 
   for (unsigned int i = 0; i < _ndisp; ++i)
     _disp_var[i] = coupled("displacements", i);
@@ -124,15 +123,12 @@ void
 StressDivergenceCurvedBeam::computeResidual()
 {
   prepareVectorTag(_assembly, _var.number());
-  
-  mooseAssert(_local_re.size()==3,"this element works only for 3-noded beam");
+
+  mooseAssert(_local_re.size() == 3, "this element works only for 3-noded beam");
   _global_force_res.resize(_test.size());
   _global_moment_res.resize(_test.size());
 
   computeGlobalResidual(&_force, &_moment, &_total_rotation, _global_force_res, _global_moment_res);
-
-
-
 
   for (_i = 0; _i < _test.size(); ++_i)
   {
@@ -157,34 +153,30 @@ StressDivergenceCurvedBeam::computeJacobian()
 {
   prepareMatrixTag(_assembly, _var.number(), _var.number());
 
-
-      if (_component < 3)
-      {
-        _local_ke(0, 0) = _Kuu00[0](_component, _component);
-        _local_ke(0, 1) = _Kuu02[0](_component, _component);
-        _local_ke(0, 2) = _Kuu04[0](_component, _component);
-        _local_ke(1, 0) = _Kuu02[0](_component, _component); 
-        _local_ke(1, 1) = _Kuu22[0](_component, _component);
-        _local_ke(1, 2) = _Kuu24[0](_component, _component);
-        _local_ke(2, 0) = _Kuu04[0](_component, _component); 
-        _local_ke(2, 1) = _Kuu24[0](_component, _component);
-        _local_ke(2, 2) = _Kuu44[0](_component, _component);
-      } 
-      else
-      {
-        _local_ke(0, 0) = _Ktt11[0](_component-3, _component-3);
-        _local_ke(0, 1) = _Ktt13[0](_component-3, _component-3);
-        _local_ke(0, 2) = _Ktt15[0](_component-3, _component-3);
-        _local_ke(1, 0) = _Ktt13[0](_component-3, _component-3); 
-        _local_ke(1, 1) = _Ktt33[0](_component-3, _component-3);
-        _local_ke(1, 2) = _Ktt35[0](_component-3, _component-3);
-        _local_ke(2, 0) = _Ktt15[0](_component-3, _component-3); 
-        _local_ke(2, 1) = _Ktt35[0](_component-3, _component-3);
-        _local_ke(2, 2) = _Ktt55[0](_component-3, _component-3);
-      }
-    
-  
-
+  if (_component < 3)
+  {
+    _local_ke(0, 0) = _Kuu00[0](_component, _component);
+    _local_ke(0, 1) = _Kuu02[0](_component, _component);
+    _local_ke(0, 2) = _Kuu04[0](_component, _component);
+    _local_ke(1, 0) = _Kuu02[0](_component, _component);
+    _local_ke(1, 1) = _Kuu22[0](_component, _component);
+    _local_ke(1, 2) = _Kuu24[0](_component, _component);
+    _local_ke(2, 0) = _Kuu04[0](_component, _component);
+    _local_ke(2, 1) = _Kuu24[0](_component, _component);
+    _local_ke(2, 2) = _Kuu44[0](_component, _component);
+  }
+  else
+  {
+    _local_ke(0, 0) = _Ktt11[0](_component - 3, _component - 3);
+    _local_ke(0, 1) = _Ktt13[0](_component - 3, _component - 3);
+    _local_ke(0, 2) = _Ktt15[0](_component - 3, _component - 3);
+    _local_ke(1, 0) = _Ktt13[0](_component - 3, _component - 3);
+    _local_ke(1, 1) = _Ktt33[0](_component - 3, _component - 3);
+    _local_ke(1, 2) = _Ktt35[0](_component - 3, _component - 3);
+    _local_ke(2, 0) = _Ktt15[0](_component - 3, _component - 3);
+    _local_ke(2, 1) = _Ktt35[0](_component - 3, _component - 3);
+    _local_ke(2, 2) = _Ktt55[0](_component - 3, _component - 3);
+  }
 
   accumulateTaggedLocalMatrix();
 
@@ -201,7 +193,6 @@ StressDivergenceCurvedBeam::computeJacobian()
   }
 }
 
-
 void
 StressDivergenceCurvedBeam::computeOffDiagJacobian(const unsigned int jvar_num)
 {
@@ -212,7 +203,7 @@ StressDivergenceCurvedBeam::computeOffDiagJacobian(const unsigned int jvar_num)
     unsigned int coupled_component = 0;
     bool disp_coupled = false;
     bool rot_coupled = false;
-  
+
     for (unsigned int i = 0; i < _ndisp; ++i)
     {
       if (jvar_num == _disp_var[i])
@@ -238,59 +229,55 @@ StressDivergenceCurvedBeam::computeOffDiagJacobian(const unsigned int jvar_num)
     if (disp_coupled || rot_coupled)
     {
 
-          if (_component < 3 && coupled_component < 3)
-          {
-            _local_ke(0, 0) += _Kuu00[0](_component, coupled_component);
-            _local_ke(0, 1) += _Kuu02[0](_component, coupled_component);
-            _local_ke(0, 2) += _Kuu04[0](_component, coupled_component);
-            _local_ke(1, 0) += _Kuu02[0](coupled_component,_component); 
-            _local_ke(1, 1) += _Kuu22[0](_component, coupled_component);
-            _local_ke(1, 2) += _Kuu24[0](_component, coupled_component);
-            _local_ke(2, 0) += _Kuu04[0](coupled_component,_component); 
-            _local_ke(2, 1) += _Kuu24[0](coupled_component,_component);
-            _local_ke(2, 2) += _Kuu44[0](_component, coupled_component);
-          } 
-          else if (_component < 3 && coupled_component > 2)
-          {
-            _local_ke(0, 0) += _Kut01[0](_component, coupled_component-3);
-            _local_ke(0, 1) += _Kut03[0](_component, coupled_component-3);
-            _local_ke(0, 2) += _Kut05[0](_component, coupled_component-3);
-            _local_ke(1, 0) += _Ktu12[0](coupled_component-3, _component); 
-            _local_ke(1, 1) += _Kut23[0](_component, coupled_component-3);
-            _local_ke(1, 2) += _Kut25[0](_component, coupled_component-3);
-            _local_ke(2, 0) += _Ktu14[0](coupled_component-3, _component); 
-            _local_ke(2, 1) += _Ktu34[0](coupled_component-3, _component);
-            _local_ke(2, 2) += _Kut45[0](_component, coupled_component-3);
-          }
-          else if (_component > 2 && coupled_component < 3)
-          {
-            _local_ke(0, 0) += _Kut01[0](coupled_component,_component-3);
-            _local_ke(0, 1) += _Ktu12[0](_component-3, coupled_component);
-            _local_ke(0, 2) += _Ktu14[0](_component-3, coupled_component);
-            _local_ke(1, 0) += _Kut03[0](coupled_component,_component-3); 
-            _local_ke(1, 1) += _Kut23[0](coupled_component,_component-3);
-            _local_ke(1, 2) += _Ktu34[0](_component-3, coupled_component);
-            _local_ke(2, 0) += _Kut05[0](coupled_component,_component-3); 
-            _local_ke(2, 1) += _Kut25[0](coupled_component,_component-3);
-            _local_ke(2, 2) += _Kut45[0](coupled_component,_component-3);
-          }
-          else
-          {
-            _local_ke(0, 0) += _Ktt11[0](_component-3, coupled_component - 3);
-            _local_ke(0, 1) += _Ktt13[0](_component-3, coupled_component - 3);
-            _local_ke(0, 2) += _Ktt15[0](_component-3, coupled_component - 3);
-            _local_ke(1, 0) += _Ktt13[0](coupled_component - 3, _component-3); 
-            _local_ke(1, 1) += _Ktt33[0](_component-3, coupled_component - 3);
-            _local_ke(1, 2) += _Ktt35[0](_component-3, coupled_component - 3);
-            _local_ke(2, 0) += _Ktt15[0](coupled_component - 3, _component-3); 
-            _local_ke(2, 1) += _Ktt35[0](coupled_component - 3, _component-3);
-            _local_ke(2, 2) += _Ktt55[0](_component-3, coupled_component - 3);
-          }
-        
-      
+      if (_component < 3 && coupled_component < 3)
+      {
+        _local_ke(0, 0) += _Kuu00[0](_component, coupled_component);
+        _local_ke(0, 1) += _Kuu02[0](_component, coupled_component);
+        _local_ke(0, 2) += _Kuu04[0](_component, coupled_component);
+        _local_ke(1, 0) += _Kuu02[0](coupled_component, _component);
+        _local_ke(1, 1) += _Kuu22[0](_component, coupled_component);
+        _local_ke(1, 2) += _Kuu24[0](_component, coupled_component);
+        _local_ke(2, 0) += _Kuu04[0](coupled_component, _component);
+        _local_ke(2, 1) += _Kuu24[0](coupled_component, _component);
+        _local_ke(2, 2) += _Kuu44[0](_component, coupled_component);
+      }
+      else if (_component < 3 && coupled_component > 2)
+      {
+        _local_ke(0, 0) += _Kut01[0](_component, coupled_component - 3);
+        _local_ke(0, 1) += _Kut03[0](_component, coupled_component - 3);
+        _local_ke(0, 2) += _Kut05[0](_component, coupled_component - 3);
+        _local_ke(1, 0) += _Ktu12[0](coupled_component - 3, _component);
+        _local_ke(1, 1) += _Kut23[0](_component, coupled_component - 3);
+        _local_ke(1, 2) += _Kut25[0](_component, coupled_component - 3);
+        _local_ke(2, 0) += _Ktu14[0](coupled_component - 3, _component);
+        _local_ke(2, 1) += _Ktu34[0](coupled_component - 3, _component);
+        _local_ke(2, 2) += _Kut45[0](_component, coupled_component - 3);
+      }
+      else if (_component > 2 && coupled_component < 3)
+      {
+        _local_ke(0, 0) += _Kut01[0](coupled_component, _component - 3);
+        _local_ke(0, 1) += _Ktu12[0](_component - 3, coupled_component);
+        _local_ke(0, 2) += _Ktu14[0](_component - 3, coupled_component);
+        _local_ke(1, 0) += _Kut03[0](coupled_component, _component - 3);
+        _local_ke(1, 1) += _Kut23[0](coupled_component, _component - 3);
+        _local_ke(1, 2) += _Ktu34[0](_component - 3, coupled_component);
+        _local_ke(2, 0) += _Kut05[0](coupled_component, _component - 3);
+        _local_ke(2, 1) += _Kut25[0](coupled_component, _component - 3);
+        _local_ke(2, 2) += _Kut45[0](coupled_component, _component - 3);
+      }
+      else
+      {
+        _local_ke(0, 0) += _Ktt11[0](_component - 3, coupled_component - 3);
+        _local_ke(0, 1) += _Ktt13[0](_component - 3, coupled_component - 3);
+        _local_ke(0, 2) += _Ktt15[0](_component - 3, coupled_component - 3);
+        _local_ke(1, 0) += _Ktt13[0](coupled_component - 3, _component - 3);
+        _local_ke(1, 1) += _Ktt33[0](_component - 3, coupled_component - 3);
+        _local_ke(1, 2) += _Ktt35[0](_component - 3, coupled_component - 3);
+        _local_ke(2, 0) += _Ktt15[0](coupled_component - 3, _component - 3);
+        _local_ke(2, 1) += _Ktt35[0](coupled_component - 3, _component - 3);
+        _local_ke(2, 2) += _Ktt55[0](_component - 3, coupled_component - 3);
+      }
     }
-
-    
 
     accumulateTaggedLocalMatrix();
   }
@@ -298,9 +285,10 @@ StressDivergenceCurvedBeam::computeOffDiagJacobian(const unsigned int jvar_num)
 
 void
 StressDivergenceCurvedBeam::computeDynamicTerms(std::vector<RealVectorValue> & global_force_res,
-                                          std::vector<RealVectorValue> & global_moment_res)
+                                                std::vector<RealVectorValue> & global_moment_res)
 {
-  mooseAssert(_zeta[0] >= 0.0, "StressDivergenceCurvedBeam: Zeta parameter should be non-negative.");
+  mooseAssert(_zeta[0] >= 0.0,
+              "StressDivergenceCurvedBeam: Zeta parameter should be non-negative.");
   std::vector<RealVectorValue> global_force_res_old(_test.size());
   std::vector<RealVectorValue> global_moment_res_old(_test.size());
   computeGlobalResidual(
@@ -333,11 +321,12 @@ StressDivergenceCurvedBeam::computeDynamicTerms(std::vector<RealVectorValue> & g
 }
 
 void
-StressDivergenceCurvedBeam::computeGlobalResidual(const MaterialProperty<RealVectorValue> * force,
-                                            const MaterialProperty<RealVectorValue> * moment,
-                                            const MaterialProperty<RankTwoTensor> * total_rotation,
-                                            std::vector<RealVectorValue> & global_force_res,
-                                            std::vector<RealVectorValue> & global_moment_res)
+StressDivergenceCurvedBeam::computeGlobalResidual(
+    const MaterialProperty<RealVectorValue> * force,
+    const MaterialProperty<RealVectorValue> * moment,
+    const MaterialProperty<RankTwoTensor> * total_rotation,
+    std::vector<RealVectorValue> & global_force_res,
+    std::vector<RealVectorValue> & global_moment_res)
 {
   RealVectorValue a;
   _force_local_t.resize(_qrule->n_points());
@@ -348,16 +337,15 @@ StressDivergenceCurvedBeam::computeGlobalResidual(const MaterialProperty<RealVec
   FEType fe_type(Utility::string_to_enum<Order>("SECOND"),
                  Utility::string_to_enum<FEFamily>("LAGRANGE"));
   auto & fe = _fe_problem.assembly(_tid, _nonlinear_sys.number()).getFE(fe_type, 1);
-//{{-1.27459,-0.5,0.27459},{-0.27459,0.5,1.27459},{1.54918,0,-1.54918}};//
+  //{{-1.27459,-0.5,0.27459},{-0.27459,0.5,1.27459},{1.54918,0,-1.54918}};//
   _dphidxi_map = fe->get_fe_map().get_dphidxi_map();
- // {{0.687289,0,-0.0873},{-0.0873,0,0.687289},{0.4,1.0,0.4}};
+  // {{0.687289,0,-0.0873},{-0.0873,0,0.687289},{0.4,1.0,0.4}};
   _phi_map = fe->get_fe_map().get_phi_map();
   // convert forces/moments from global coordinate system to current beam local configuration
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
   {
     _force_local_t[_qp] = (*total_rotation)[0] * (*force)[_qp];
     _moment_local_t[_qp] = (*total_rotation)[0] * (*moment)[_qp];
-
   }
 
   // residual for displacement variables
@@ -367,7 +355,8 @@ StressDivergenceCurvedBeam::computeGlobalResidual(const MaterialProperty<RealVec
     for (unsigned int component = 0; component < 3; ++component)
     {
       for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
-        _local_force_res[_i](component) +=_force_local_t[_qp](component) *_q_weights[_qp]*_dphidxi_map[_i][_qp];
+        _local_force_res[_i](component) +=
+            _force_local_t[_qp](component) * _q_weights[_qp] * _dphidxi_map[_i][_qp];
     }
   }
 
@@ -380,13 +369,19 @@ StressDivergenceCurvedBeam::computeGlobalResidual(const MaterialProperty<RealVec
       for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
       {
         if (component == 3)
-          _local_moment_res[_i](component - 3) +=_moment_local_t[_qp](0) * _q_weights[_qp]*_dphidxi_map[_i][_qp];
+          _local_moment_res[_i](component - 3) +=
+              _moment_local_t[_qp](0) * _q_weights[_qp] * _dphidxi_map[_i][_qp];
         else if (component == 4)
-          _local_moment_res[_i](component - 3) +=_moment_local_t[_qp](1) * _q_weights[_qp]*_dphidxi_map[_i][_qp]+
-              _force_local_t[_qp](2) * 0.5 * _original_length[0]*_q_weights[_qp]*_phi_map[_i][_qp];
+          _local_moment_res[_i](component - 3) +=
+              _moment_local_t[_qp](1) * _q_weights[_qp] * _dphidxi_map[_i][_qp] +
+              _force_local_t[_qp](2) * 0.5 * _original_length[0] * _q_weights[_qp] *
+                  _phi_map[_i][_qp];
         else
-          _local_moment_res[_i](component - 3) +=_moment_local_t[_qp](2) * _q_weights[_qp]*_dphidxi_map[_i][_qp]-
-              _force_local_t[_qp](1) * 0.5 * _original_length[0]*_q_weights[_qp]*_phi_map[_i][_qp];;
+          _local_moment_res[_i](component - 3) +=
+              _moment_local_t[_qp](2) * _q_weights[_qp] * _dphidxi_map[_i][_qp] -
+              _force_local_t[_qp](1) * 0.5 * _original_length[0] * _q_weights[_qp] *
+                  _phi_map[_i][_qp];
+        ;
       }
     }
   }

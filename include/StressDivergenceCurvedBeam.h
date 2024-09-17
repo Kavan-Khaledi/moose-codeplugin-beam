@@ -58,27 +58,27 @@ protected:
   const MaterialProperty<RealVectorValue> & _moment;
 
   /// Stiffness matrix relating displacement DOFs of same node or across nodes
-  const MaterialProperty<RankTwoTensor> &  _Kuu00;
-  const MaterialProperty<RankTwoTensor> &  _Kut01;
-  const MaterialProperty<RankTwoTensor> &  _Kuu02;
-  const MaterialProperty<RankTwoTensor> &  _Kut03;
-  const MaterialProperty<RankTwoTensor> &  _Kuu04;
-  const MaterialProperty<RankTwoTensor> &  _Kut05;
-  const MaterialProperty<RankTwoTensor> &  _Ktt11;
-  const MaterialProperty<RankTwoTensor> &  _Ktu12;
-  const MaterialProperty<RankTwoTensor> &  _Ktt13;
-  const MaterialProperty<RankTwoTensor> &  _Ktu14;
-  const MaterialProperty<RankTwoTensor> &  _Ktt15;
-  const MaterialProperty<RankTwoTensor> &  _Kuu22;
-  const MaterialProperty<RankTwoTensor> &  _Kut23;
-  const MaterialProperty<RankTwoTensor> &  _Kuu24;
-  const MaterialProperty<RankTwoTensor> &  _Kut25;
-  const MaterialProperty<RankTwoTensor> &  _Ktt33;
-  const MaterialProperty<RankTwoTensor> &  _Ktu34;
-  const MaterialProperty<RankTwoTensor> &  _Ktt35;
-  const MaterialProperty<RankTwoTensor> &  _Kuu44;
-  const MaterialProperty<RankTwoTensor> &  _Kut45;
-  const MaterialProperty<RankTwoTensor> &  _Ktt55;
+  const MaterialProperty<RankTwoTensor> & _Kuu00;
+  const MaterialProperty<RankTwoTensor> & _Kut01;
+  const MaterialProperty<RankTwoTensor> & _Kuu02;
+  const MaterialProperty<RankTwoTensor> & _Kut03;
+  const MaterialProperty<RankTwoTensor> & _Kuu04;
+  const MaterialProperty<RankTwoTensor> & _Kut05;
+  const MaterialProperty<RankTwoTensor> & _Ktt11;
+  const MaterialProperty<RankTwoTensor> & _Ktu12;
+  const MaterialProperty<RankTwoTensor> & _Ktt13;
+  const MaterialProperty<RankTwoTensor> & _Ktu14;
+  const MaterialProperty<RankTwoTensor> & _Ktt15;
+  const MaterialProperty<RankTwoTensor> & _Kuu22;
+  const MaterialProperty<RankTwoTensor> & _Kut23;
+  const MaterialProperty<RankTwoTensor> & _Kuu24;
+  const MaterialProperty<RankTwoTensor> & _Kut25;
+  const MaterialProperty<RankTwoTensor> & _Ktt33;
+  const MaterialProperty<RankTwoTensor> & _Ktu34;
+  const MaterialProperty<RankTwoTensor> & _Ktt35;
+  const MaterialProperty<RankTwoTensor> & _Kuu44;
+  const MaterialProperty<RankTwoTensor> & _Kut45;
+  const MaterialProperty<RankTwoTensor> & _Ktt55;
 
   /// Initial length of beam
   const MaterialProperty<Real> & _original_length;
@@ -135,5 +135,4 @@ protected:
   std::vector<std::vector<Real>> _dphidxi_map;
   std::vector<std::vector<Real>> _phi_map;
   NonlinearSystemBase & _nonlinear_sys;
-
 };

@@ -55,7 +55,7 @@ ComputeCurvedBeamResultants::computeQpProperties()
   force_increment(2) = _material_stiffness[_qp](2) * _disp_strain_increment[_qp](2);
 
   _force[_qp] = _total_rotation[0].transpose() * force_increment + _force_old[_qp];
-  _beam_force[_qp]= force_increment + _total_rotation[0] *_force_old[_qp];
+  _beam_force[_qp] = force_increment + _total_rotation[0] * _force_old[_qp];
   // moment = R^T * _material_flexure * rotation_increment + moment_old
   RealVectorValue moment_increment;
   moment_increment(0) = _material_flexure[_qp](0) * _rot_strain_increment[_qp](0);
@@ -63,5 +63,5 @@ ComputeCurvedBeamResultants::computeQpProperties()
   moment_increment(2) = _material_flexure[_qp](2) * _rot_strain_increment[_qp](2);
 
   _moment[_qp] = _total_rotation[0].transpose() * moment_increment + _moment_old[_qp];
-  _beam_moment[_qp]= moment_increment + _total_rotation[0] *_moment_old[_qp];
+  _beam_moment[_qp] = moment_increment + _total_rotation[0] * _moment_old[_qp];
 }

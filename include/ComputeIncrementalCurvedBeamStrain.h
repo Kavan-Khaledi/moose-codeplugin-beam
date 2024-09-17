@@ -16,8 +16,8 @@
 class Function;
 
 /**
- * ComputeIncrementalCurvedBeamStrain defines a displacement and rotation strain increment and rotation
- * increment (=1), for small strains.
+ * ComputeIncrementalCurvedBeamStrain defines a displacement and rotation strain increment and
+ * rotation increment (=1), for small strains.
  */
 class ComputeIncrementalCurvedBeamStrain : public Material
 {
@@ -103,28 +103,27 @@ protected:
   /// Material stiffness vector that relates displacement strain increments to force increments
   const MaterialProperty<RealVectorValue> & _material_stiffness;
 
-
-  MaterialProperty<RankTwoTensor> &  _Kuu00;
-  MaterialProperty<RankTwoTensor> &  _Kut01;
-  MaterialProperty<RankTwoTensor> &  _Kuu02;
-  MaterialProperty<RankTwoTensor> &  _Kut03;
-  MaterialProperty<RankTwoTensor> &  _Kuu04;
-  MaterialProperty<RankTwoTensor> &  _Kut05;
-  MaterialProperty<RankTwoTensor> &  _Ktt11;
-  MaterialProperty<RankTwoTensor> &  _Ktu12;
-  MaterialProperty<RankTwoTensor> &  _Ktt13;
-  MaterialProperty<RankTwoTensor> &  _Ktu14;
-  MaterialProperty<RankTwoTensor> &  _Ktt15;
-  MaterialProperty<RankTwoTensor> &  _Kuu22;
-  MaterialProperty<RankTwoTensor> &  _Kut23;
-  MaterialProperty<RankTwoTensor> &  _Kuu24;
-  MaterialProperty<RankTwoTensor> &  _Kut25;
-  MaterialProperty<RankTwoTensor> &  _Ktt33;
-  MaterialProperty<RankTwoTensor> &  _Ktu34;
-  MaterialProperty<RankTwoTensor> &  _Ktt35;
-  MaterialProperty<RankTwoTensor> &  _Kuu44;
-  MaterialProperty<RankTwoTensor> &  _Kut45;
-  MaterialProperty<RankTwoTensor> &  _Ktt55;
+  MaterialProperty<RankTwoTensor> & _Kuu00;
+  MaterialProperty<RankTwoTensor> & _Kut01;
+  MaterialProperty<RankTwoTensor> & _Kuu02;
+  MaterialProperty<RankTwoTensor> & _Kut03;
+  MaterialProperty<RankTwoTensor> & _Kuu04;
+  MaterialProperty<RankTwoTensor> & _Kut05;
+  MaterialProperty<RankTwoTensor> & _Ktt11;
+  MaterialProperty<RankTwoTensor> & _Ktu12;
+  MaterialProperty<RankTwoTensor> & _Ktt13;
+  MaterialProperty<RankTwoTensor> & _Ktu14;
+  MaterialProperty<RankTwoTensor> & _Ktt15;
+  MaterialProperty<RankTwoTensor> & _Kuu22;
+  MaterialProperty<RankTwoTensor> & _Kut23;
+  MaterialProperty<RankTwoTensor> & _Kuu24;
+  MaterialProperty<RankTwoTensor> & _Kut25;
+  MaterialProperty<RankTwoTensor> & _Ktt33;
+  MaterialProperty<RankTwoTensor> & _Ktu34;
+  MaterialProperty<RankTwoTensor> & _Ktt35;
+  MaterialProperty<RankTwoTensor> & _Kuu44;
+  MaterialProperty<RankTwoTensor> & _Kut45;
+  MaterialProperty<RankTwoTensor> & _Ktt55;
 
   /// Boolean flag to turn on large strain calculation
   const bool _large_strain;
@@ -182,5 +181,4 @@ protected:
   const Function * const _prefactor_function;
 
   const bool _has_y_vector;
-  
 };
