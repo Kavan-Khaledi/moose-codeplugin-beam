@@ -11,6 +11,7 @@
 
 #include "Kernel.h"
 #include "RankTwoTensorForward.h"
+#include "NonlinearSystemBase.h"
 
 class StressDivergenceCurvedBeam : public Kernel
 {
